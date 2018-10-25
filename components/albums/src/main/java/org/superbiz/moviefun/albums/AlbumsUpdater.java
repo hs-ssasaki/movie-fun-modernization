@@ -41,14 +41,14 @@ public class AlbumsUpdater {
     }
 
     public void update() throws IOException {
-        Optional<Blob> maybeBlob = blobStore.get("albums.csv");
+        Blob blob = blobStore.get("albums.csv");
 
-        if (!maybeBlob.isPresent()) {
+        if (blob == null) {
             logger.info("No albums.csv found when running AlbumsUpdater!");
             return;
         }
 
-        List<Album> albumsToHave = CsvUtils.readFromCsv(objectReader, maybeBlob.get().inputStream);
+        List<Album> albumsToHave = CsvUtils.readFromCsv(objectReader, blob.inputStream);
         List<Album> albumsWeHave = albumsRepository.getAlbums();
 
         createNewAlbums(albumsToHave, albumsWeHave);

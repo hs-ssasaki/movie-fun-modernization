@@ -30,17 +30,17 @@ public class FileStore implements BlobStore {
     }
 
     @Override
-    public Optional<Blob> get(String name) throws IOException {
+    public Blob get(String name) throws IOException {
         File file = new File(name);
 
         if (!file.exists()) {
-            return Optional.empty();
+            return null;
         }
 
-        return Optional.of(new Blob(
+        return new Blob(
             name,
             new FileInputStream(file),
             tika.detect(file)
-        ));
+        );
     }
 }

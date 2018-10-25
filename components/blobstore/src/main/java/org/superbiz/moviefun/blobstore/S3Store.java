@@ -29,9 +29,9 @@ public class S3Store implements BlobStore {
     }
 
     @Override
-    public Optional<Blob> get(String name) throws IOException {
+    public Blob get(String name) throws IOException {
         if (!s3.doesObjectExist(bucketName, name)) {
-            return Optional.empty();
+            return null;
         }
 
         S3Object s3Object = s3.getObject(bucketName, name);
@@ -39,10 +39,10 @@ public class S3Store implements BlobStore {
 
         byte[] bytes = IOUtils.toByteArray(content);
 
-        return Optional.of(new Blob(
-            name,
-            new ByteArrayInputStream(bytes),
-            tika.detect(bytes)
-        ));
+        return new Blob(
+                name,
+                new ByteArrayInputStream(bytes),
+                tika.detect(bytes)
+        );
     }
 }
